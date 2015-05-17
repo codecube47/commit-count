@@ -2,12 +2,13 @@ require 'github_api'
 
 print "Enter github users:  "
 users = gets
+@is_repo = true;
 
 # get comments from user list
 def getCommits(users)
 	user_commits = {}
 	# Check athentications
-	github = Github.new :oauth_token => 'your ouath token'
+	github = Github.new :oauth_token => 'Enter your key'
 	print "Connecting and getting data please wait for a while ."
 
   users.split(',').map(&:strip).each do |user|
@@ -16,26 +17,34 @@ def getCommits(users)
 			repos = github.repos.list user: user
 		rescue Github::Error::NotFound
            puts "No user exist"
-		rescue Exception
-		  # handle everything else
-		end
+		rescue Exception => e
+          puts e
+    end
 
-    print "."
-	total_commits=0
-	repos.each do |repo|    
-	    repo_total=0
-		commit_activity = github.repos.stats.commit_activity user: user, repo: repo.name	
-		commit_activity.each do |activity|
-		     repo_total+=activity.total
-		end
-	  total_commits+=repo_total
-	end
-	user_commits["#{user}"] = "#{total_commits}"
+    if !repos.nil?
+      print "."
+      total_commits=0
+      repos.each do |repo|
+          repo_total=0
+        commit_activity = github.repos.stats.commit_activity user: user, repo: repo.name
+        commit_activity.each do |activity|
+             repo_total+=activity.total
+        end
+        total_commits+=repo_total
+      end
+      user_commits["#{user}"] = "#{total_commits}"
+    else
+      puts"No repo founded"
+      @is_repo = false;
+    end
   end
-  puts""
-  puts"========================="
-  user_commits = user_commits.sort_by {|k,v| v}.reverse
-  user_commits.each {|k,v| puts "#{k}: #{v}"}
+
+  if @is_repo
+    puts""
+    puts"========================="
+    user_commits = user_commits.sort_by {|k,v| v}.reverse
+    user_commits.each {|k,v| puts "#{k}: #{v}"}
+  end
 
 end
 
