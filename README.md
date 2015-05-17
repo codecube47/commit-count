@@ -1,6 +1,6 @@
 # commit-count
 
-Get list of commits by github users
+Get all commits from list of github users
 
 ## Installation
 
