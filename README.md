@@ -6,6 +6,10 @@ Get list of commits by github users
 
     gem install github_api
 
+## Add your oauth_token
+
+    github = Github.new :oauth_token => 'Enter your key'
+
 And then execute:
 
     $ ruby commits.rb
