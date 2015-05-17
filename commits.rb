@@ -7,7 +7,7 @@ users = gets
 def getCommits(users)
 	user_commits = {}
 	# Check athentications
-	github = Github.new :oauth_token => 'b3f4377813d9c76fe54b16f1349eae511da3814c'
+	github = Github.new :oauth_token => 'your ouath token'
 	print "Connecting and getting data please wait for a while ."
 
   users.split(',').map(&:strip).each do |user|
